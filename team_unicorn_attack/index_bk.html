@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="jp">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="initial-scale=1.0">
+<!-- style -->
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../assets/css/parts.css">
+<!-- js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../assets/js/common.js"></script>
+<script>
+  let endFlag = false;
+  let cnt = 0;
+  let tap0 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap1 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap2 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap3 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap4 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap5 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap6 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap7 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap8 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tap9 = new Audio('../assets/mp3/beamgun1.mp3');
+  let tapArray = new Array();
+  tapArray.push(tap0);
+  tapArray.push(tap1);
+  tapArray.push(tap2);
+  tapArray.push(tap3);
+  tapArray.push(tap4);
+  tapArray.push(tap5);
+  tapArray.push(tap6);
+  tapArray.push(tap7);
+  tapArray.push(tap8);
+  tapArray.push(tap9);
+  // Tap Sound
+  let TapSound = (cnt) => {
+    tapArray[cnt].currentTime = 0;
+    tapArray[cnt].play();
+  }
+  // Attack Sound
+  let AttackSound = () => {
+    // alert("unicorn");
+    TapSound(cnt);
+    if (cnt == 9) {
+      cnt = 0;
+    }
+    cnt++;  
+  }
+  if (window.ontouchstart === null) {
+    window.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+    });
+    // window.addEventListener('touchmove', (e) => {
+    //   e.preventDefault();
+    // });
+    window.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      Attack();
+    });
+  } else {
+    // window.addEventListener('click', (e) => {
+    // });
+  }
+
+  // Polling
+  let pooling = () => {
+    $.ajax({
+      url: 'https://gundamapim.azurewebsites.net/api/front/status',
+      type: 'GET',
+      dataType: 'json'
+    })
+    .done((data) => {
+      // Case game jedgement(status=3)
+      console.log(JSON.stringify(data));
+      if(data.status == 2) {
+        console.log("status is 2.");
+        $('.screen_wrap').removeClass('bg_yellow_attack');
+        $('.mask_bg').removeClass('active');
+        $('.tapArea').removeClass('tapArea');
+        $('.changeImg01_n').children('img').attr('src', '../assets/img/character_neozeong01.png');
+        $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+        $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+        // EndFlag(=ON)
+        endFlag = true;
+
+      } else if(data.status == 3) {
+        console.log("status is 3.");
+        // Stop Pooling
+        clearInterval(pooling);
+        console.log("Start GameResutl--->");
+
+        // Check battle result
+        // Get game result
+        $.ajax({
+          url: 'https://gundamapim.azurewebsites.net/api/front/result',
+          type: 'GET',
+          dataType: 'json',
+          data: {
+            sid : window.sessionStorage.getItem('sid')
+          },
+          timeout:3000
+        })
+        .done((data) => {
+          console.log("Game Result process");
+          console.log(JSON.stringify(data));
+          // Check rank information
+          let l_rank = data.rank;
+          if(l_rank == null) {
+            console.log("rank is null");
+            l_rank = 999;
+          }
+          // Save rank to session storage
+          window.sessionStorage.setItem(['rank'], l_rank);
+          // Save result to session storage
+          window.sessionStorage.setItem(['result'], data.result);
+
+          // Page transition
+          if(data.result == 0) {
+            console.log("Lose");
+            // Lose画面なし
+            setTimeout(() => {
+              location.href="../team_unicorn_result";
+            }, 1000);
+          } else {
+            console.log("Win");
+            setTimeout(() => {
+              location.href="../team_unicorn_result";
+            }, 1000);
+          }
+        })
+        .fail((data) => {
+          // console.log("Exception...");
+        })
+        .always((data) => {
+          // console.log("Complete...");
+        });
+      } else {
+        // console.log("Game judgement end waiting....");
+      }
+    })
+    .fail((data) => {
+      // console.log("Exception...");
+    })
+    .always((data) => {
+    //  console.log("Complete...");
+    });
+  }
+  // Execute pooling
+  poolid = setInterval(pooling, 2000);
+
+  // Attack
+  function Attack() {
+    if (endFlag) {
+      console.log("Do not attack, because game has finished.");
+      return;
+    }
+    // AttackSound();
+    // Attack
+    $.ajax({
+      url: 'https://gundamapim.azurewebsites.net/api/front/attack',
+      type: 'GET',
+      dataType: 'json',
+      data: {
+        sid : window.sessionStorage.getItem('sid'),
+        language : window.sessionStorage.getItem('lang'),
+        team : window.sessionStorage.getItem('team')
+       },
+       timeout:3000
+    })
+    .done((data) => {
+      // Sound
+      // sound0.currentTime = 0;
+      // sound0.play();
+
+      AttackSound();
+
+      // Check response
+      // console.log("Attack process");
+      // console.log(JSON.stringify(data));
+      if (data == null) {
+        // console.log("data is null");
+      } else if (data.sid == null) {
+        // console.log("Sid is null, so go to top page.");
+        // Page transition to Top Page
+        location.href="../";
+      } else if (data.status == 1) {
+        // console.log("Attacking...");
+      } else if (data.status == 2) {
+        // console.log("staus is 2");
+        // $('.screen_wrap').removeClass('bg_yellow_attack');
+        // $('.mask_bg').removeClass('active');
+        // $('.tapArea').removeClass('tapArea');
+        // $('.changeImg01_n').children('img').attr('src', '../assets/img/character_neozeong01.png');
+        // $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+        // $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+      } else {
+        console.log("Unreachble root.");
+      }
+    })
+    .fail((data) => {
+      // console.log("Exception...");
+    })
+    .always((data) => {
+      console.log("Complete...");
+    });
+
+    // console.log("Here--->");
+  }
+  $(document).ready(function(){
+    var heightSize = $(window).height();
+    $('.screen_wrap').height(heightSize);
+    $('.mask_bg').height(heightSize);
+  // setTimeout(function(){
+  //   $('.screen_wrap').removeClass('bg_yellow_attack');
+  //   $('.mask_bg').removeClass('active');
+  //   $('.tapArea').removeClass('tapArea');
+  //   $('.changeImg01_n').children('img').attr('src', '../assets/img/character_neozeong01.png');
+  //   $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+  //   $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame.png');
+  // },45000);
+  // TAPボタン削除
+    setTimeout(function(){
+      $('.none1').addClass('active');
+    },3500);
+
+  });
+</script>
+  <head>
+    <title>SEND ENERGY</title>
+  </head>
+  <body>
+    <!-- <audio id="openAudio">
+      <source src="../assets/mp3/sendenergy.mp3" type="audio/mpeg">
+    </audio> -->
+    <section id="attack_sec" onClick="Attack()" class="tapArea screen_wrap steam_neozeong bg_unicorn_normal bg_yellow_attack">
+      <div class="none active mask_bg mask_bg_battlestart">
+        <div class="ttl_center">
+          <figure>
+            <img src="../assets/img/ttl_battleover.png" alt="">
+          </figure>
+        </div>
+      </div>
+      <div class="img_w img_w95 top_abs_bar">
+        <figure>
+          <img src="../assets/img/top_bar01.png" alt="装飾ヘッダー">
+        </figure>
+      </div>
+      <div class="top_abs_ttl none">
+        <p class="text_shadow_danger01 font40 en_font">SEND<br>ENERGY!!</p>
+      </div>
+      <div id="btn" class="shake_btn">
+        <div class="img_character_left">
+          <figure class="changeImg01_u img_w img_w60">
+            <img src="../assets/img/character_unicorn_danger01.png" alt="キャラクター">
+          </figure>
+        </div>
+      </div>
+      <div class="none1">
+        <div id="sound_btn" class="blinking tap_button">
+          <a onClick="sound()">
+            <figure class="img_w img_w25">
+              <img src="../assets/img/icon_neozeon_tap.png" alt="ここをタップしてエネルギーを送って ネオ・ジオング  を支援せよ！">
+            </figure>
+          </a>
+        </div>
+      </div>
+      <div class="none bottom_abs_button zindex_button">
+        <div class="flex wrap img_w img_w90">
+          <figure class="bg_frame rel">
+            <p class="abs_text_center font15"><span class="c_yellow">エネルギーを送って</span><br>ネオ・ジオング  を支援せよ！</p>
+            <figure class="changeFrame">
+              <img src="../assets/img/bg_frame_danger.png" alt="赤いフレーム">
+            </figure>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <script>
+    // var y = $("#openAudio")[0];
+    // setTimeout("mu()",0);
+    // function mu(){
+    //   y.play();
+    // }
+    </script>
+  </body>
+</html>

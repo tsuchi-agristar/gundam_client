@@ -1,0 +1,330 @@
+@charset "utf-8";
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	touch-action:none;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+figure img{
+vertical-align: bottom;
+padding: 0;
+margin: 0;
+max-width: 100%;
+}
+@font-face {
+	font-family: 'jp_font';
+	src: url(./assets/font/FOT-CometStd-B.woff);
+}
+@font-face {
+	font-family: 'en_font';
+	src: url(./assets/font/silom-webfont.woff);
+}@font-face{
+	font-family: adobe-gothic-std, sans-serif;
+	font-weight: 700;
+	font-style: normal;
+}
+.en_font{
+	font-family: 'en_font';
+}
+.ko_font{
+	font-family: adobe-gothic-std, sans-serif;
+}
+body {
+	font-family: jp_font,"游ゴシック",YuGothic,"ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ",Meiryo,sans-serif;;
+	color: #fff;
+}
+.op0{
+	opacity: 0;
+}
+/* select_sec */
+.screen_wrap{
+  position: relative;
+  left: 0;
+  top:0;
+  max-width: 750px;
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.select_sec{
+  width: 100%;
+  height: 100vh;
+  background: url(./assets/img/bg_space.jpg) top /cover no-repeat;
+}
+.bg_unicorn_normal,
+.bg_neozeong_normal{
+	width: 100%;
+  height: 100vh;
+  background: url(./assets/img/bg_space_ptn.png) top /cover no-repeat;
+}
+.screen_wrap.bg_blue:before,
+.screen_wrap.bg_blue_attack:before,
+.screen_wrap.bg_yellow:before,
+.screen_wrap.bg_yellow_attack:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(./assets/img/bg_u_nomal.png) center / cover no-repeat;
+  z-index: 0;
+}
+.screen_wrap.bg_blue_attack:before{
+	background: url(./assets/img/bg_u_nomal.png) center / cover no-repeat;
+}
+.screen_wrap.bg_yellow:before {
+  background: url(./assets/img/bg_n_normal.png) center / cover no-repeat;
+}
+.screen_wrap.bg_yellow_attack:before {
+	background: url(./assets/img/bg_n_danger.png) center / cover no-repeat;
+}
+.mask_bg{
+	width: 100%;
+}
+.shake_btn{
+	display:block
+}
+@keyframes shake{
+	0% { transform: scale(1, 1); }
+	50% { transform: scale(1.1, 1.1); }
+	100% { transform: scale(1, 1); }
+}
+.mask_bg.mask_bg_battlestart{
+	position: relative;
+	z-index: 100;
+}
+.mask_bg.mask_bg_battlestart::before{
+	position: absolute;
+	content: "";
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 100;
+}
+.ttl_center{
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	height: auto;
+	transform: translateY(-50%);
+	z-index: 110;
+}
+.none{
+	/* transition: 200ms; */
+}
+.none.active,
+.none1.active {
+  opacity: 0 !important;
+  cursor: none;
+	transition: 300ms;
+}
+/*  */
+.img_mainbg_gundom,
+.img_mainbg_gundom_result{
+  position: absolute;
+  width: 100%;
+  top: 27.5vw;
+  right: 7.5vw;
+}
+.img_mainbg_gundom_result{
+	top: 27.5vw;
+	right: 25.5vw;
+}
+.img_character_center,
+.img_character_left,
+.img_character_center.add_top{
+	position: absolute;
+	width: 100%;
+	top: 71vw;
+	right: 0;
+	left: 0;
+	transform: translateY(-50%);
+}
+.img_character_center.add_top{
+	top: 66vw;
+}
+.img_character_left{
+	left: 6vw;
+}
+.abs_text_center,
+.abs_text_left,
+.abs_text_right{
+	position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+	line-height: 1.4rem;
+}
+.abs_text_left{
+	left: 8vw;
+  right: auto;
+}
+.abs_text_right{
+	left: auto;
+  right: 12vw;
+}
+.tap_button{
+	position: absolute;
+  bottom: 28vw;
+  left: 0;
+  right: 0;
+	z-index: 100;
+}
+.top_abs_ttl {
+  position: absolute;
+  top: 10vw;
+  left: 0;
+  right: 0;
+  text-align: center;
+	z-index: 30;
+}
+.blinking{
+	-webkit-animation:blink 0.8s ease-in-out infinite alternate;
+  -moz-animation:blink 0.8s ease-in-out infinite alternate;
+  animation:blink 0.8s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:1;}
+    100% {opacity:0.2;bottom: 30vw;}
+}
+@-moz-keyframes blink{
+    0% {opacity:1;}
+    100% {opacity:0.2;bottom: 30vw;}
+}
+@keyframes blink{
+    0% {opacity:1;}
+    100% {opacity:0.2;bottom: 30vw;}
+}
+a.nextLink {
+  position: relative;
+  width: 100%;
+  display: block;
+	transition: 300ms;
+}
+a.nextLink p{
+	position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+}
+a.nextLink:hover{
+	background: linear-gradient(-120deg,rgba(255, 255, 255, 0.3), rgba(93, 252, 249, 0.8));
+  box-shadow: 0 0px 9px 5px rgba(90, 238, 229, 0.5);
+}
+a.nextLink:hover p{
+	color: #fff;
+}
+#loading {
+  width: 100%;
+  transition: all 1s;
+  background: #f1f1f1;
+	position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+.loading_center{
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	transform: translateY(-50%);
+	width: 75%;
+}
+.gallery {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.loaded {
+  opacity: 0;
+  visibility: hidden;
+	    display: none;
+}
+.loading_center img{
+	-moz-animation-name: heartBreak;
+	-moz-animation-duration: 3s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-iteration-count: infinite;
+
+	-webkit-animation-name: heartBreak;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-iteration-count: infinite;
+
+	-o-animation-name: heartBreak;
+	-o-animation-duration: 3s;
+	-o-animation-timing-function: ease;
+	-o-animation-iteration-count: infinite;
+
+	-ms-animation-name: heartBreak;
+	-ms-animation-duration: 3s;
+	-ms-animation-timing-function: ease;
+	-ms-animation-iteration-count: infinite;
+}
+@-moz-keyframes heartBreak {
+	0% { transform: scale(1, 1); }
+	100% { transform: scale(1.1, 1.1); }
+}
+
+@-webkit-keyframes heartBreak {
+	0% { transform: scale(1, 1); }
+	100% { transform: scale(1.1, 1.1); }
+}
+
+@-o-keyframes heartBreak {
+	0% { transform: scale(1, 1); }
+	100% { transform: scale(1.1, 1.1); }
+}
+
+@-ms-keyframes heartBreak {
+	0% { transform: scale(1, 1); }
+	100% { transform: scale(1.1, 1.1); }
+}

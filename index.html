@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="initial-scale=1.0">
+<!-- style -->
+<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./assets/css/parts.css">
+<!-- js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="./assets/js/common.js"></script>
+<script>
+  let selectAudio = new Audio("./assets/mp3/tap01.mp3");
+  let selectSound = () => {
+    selectAudio.play();
+  }
+  $(document).ready(function(){
+    if (window.ontouchstart === null) {
+      window.addEventListener('touchstart', (e) => {
+        // e.preventDefault();
+        selectAudio.currentTime = 0;
+        // alert("test---->touchstart");
+      });
+      window.addEventListener('touchmove', (e) => {
+        // e.preventDefault();
+        // alert("test---->touchmove");
+      });
+      window.addEventListener('touchend', (e) => {
+        // e.preventDefault();
+        // alert("test---->touchend");
+      });
+
+    } else {
+      window.addEventListener('click', (e) => {
+        e.preventDefault();
+        // alert("test---->click");
+      });
+    }
+    
+    var heightSize = $(window).height();
+    $('.screen_wrap').height(heightSize);
+    $('#loading').height(heightSize);
+    $('.nextLink').click(function(e) {
+      e.preventDefault();
+      var TransitionDelay = function(){
+        window.location.href = './team/';
+      }
+      // setTimeout ( TransitionDelay, 100 );
+      setTimeout ( TransitionDelay, 500 );
+      // Save the selected language information to session storage
+      window.sessionStorage.setItem(['lang'], $(this).data('index'));
+    });
+  });
+  // ローディング TOPのみ
+  window.onload = function() {
+    const spinner = document.getElementById('loading');
+    spinner.classList.add('loaded');
+  }
+  // Initialize the language information
+  window.sessionStorage.clear();
+  // Get a session information
+  $.ajax({
+    url: 'https://gundamapim.azurewebsites.net/api/front/initialize',
+      type: 'GET',
+      dataType: 'json'
+  })
+  .done((data) => {
+    let l_sid = data.sid;
+    if(l_sid == null) {
+      // console.log("sid is null");
+    }
+    // Save sid to session storage
+    window.sessionStorage.setItem(['sid'], l_sid);
+  })
+  .fail((data) => {
+    // console.log("Exception...");
+  })
+  .always((data) => {
+    // console.log("Complete...");
+  });
+</script>
+  <head>
+    <title>GUNDAM SCRAMBLE in FUKUOKA</title>
+  </head>
+  <body>
+    <div id="loading" class="rel">
+      <figure class="loading_center">
+        <img width="" src="./assets/img/img_title01.png" alt="セレクト">
+      </figure>
+    </div>
+    <!-- <audio id="myAudio" preload="auto">
+      <source src="./assets/mp3/tap01.mp3" type="audio/mpeg">
+    </audio> -->
+    <section id="select_sec" class="screen_wrap select_sec">
+      <div class="top_abs_button">
+        <figure class="img_w img_w90 img01 zindex1">
+          <img width="" src="./assets/img/img_title01.png" alt="セレクト">
+        </figure>
+        <figure class="img_w img_w100 img_mainbg_gundom">
+          <img src="./assets/img/img_gundom.png" alt="キャラクター">
+        </figure>
+      </div>
+      <div class="bottom_abs_button zindex_button">
+        <div class="ta_c mb10">
+          <figure>
+            <img width="138px" src="./assets/img/icon_select.png" alt="セレクト">
+          </figure>
+        </div>
+        <div class="flex wrap img_w img_w90">
+          <div class="w_49 mb5">
+            <!-- <a class="nextLink" data-index="1" onclick="playAudio()"> -->
+            <a class="nextLink" data-index="1" onclick="selectSound()">
+              <p class="font35 c_blue01">日本語</p>
+              <figure class=" button_shadow01">
+                <img src="./assets/img/default_btn01.png" alt="言語選択">
+              </figure>
+            </a>
+          </div>
+          <div class="w_49 mb5">
+            <!-- <a class="nextLink" data-index="2" onclick="playAudio()"> -->
+            <a class="nextLink" data-index="1" onclick="selectSound()">
+              <p class="font30 en_font c_blue01">English</p>
+              <figure class="button_shadow01">
+                <img src="./assets/img/default_btn01.png" alt="言語選択">
+              </figure>
+            </a>
+          </div>
+          <div class="w_49">
+            <!-- <a class="nextLink" data-index="3" onclick="playAudio()"> -->
+            <a class="nextLink" data-index="1" onclick="selectSound()">
+              <p class="font28 ko_font c_blue01">中文(简体)</p>
+              <figure class="button_shadow01">
+                <img src="./assets/img/default_btn01.png" alt="言語選択">
+              </figure>
+            </a>
+          </div>
+          <div class="decision w_49">
+            <!-- <a class="nextLink" data-index="4" onclick="playAudio()"> -->
+            <a class="nextLink" data-index="4" onclick="selectSound()">
+              <p class="font30 ko_font c_blue01">한국어</p>
+              <figure class="button_shadow01">
+                <img src="./assets/img/default_btn01.png" alt="言語選択">
+              </figure>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div style="display:none"><figure><img src="./assets/img/character_neozeong_danger01.png" alt=""></figure><figure><img src="./assets/img/character_neozeong_image01.png" alt=""></figure><figure><img src="./assets/img/character_neozeong01.png" alt=""></figure><figure><img src="./assets/img/character_unicorn_danger01.png" alt=""></figure><figure><img src="./assets/img/character_unicorn_image01.png" alt=""></figure><figure><img src="./assets/img/character_unicorn01.png" alt=""></figure><figure><img src="./assets/img/ttl_battleover.png" alt=""></figure><figure><img src="./assets/img/ttl_battlestart.png" alt=""></figure><figure><img src="./assets/img/bg_space_ptn.png" alt=""></figure><figure><img src="./assets/img/bg_u_danger.png" alt=""></figure><figure><img src="./assets/img/bg_u_nomal.png" alt=""></figure><figure><img src="./assets/img/bg_n_danger.png" alt=""></figure><figure><img src="./assets/img/bg_n_normal.png" alt=""></figure><figure><img src="./assets/img/team_n_btn.png" alt=""></figure><figure><img src="./assets/img/team_u_btn01.png" alt=""></figure><figure><img src="./assets/img/bg_frame_result.png" alt=""></figure></div>
+  <!-- <script type="text/javascript">
+    var x = $("#myAudio")[0];
+    function playAudio() {
+      x.play();
+    }
+  </script> -->
+  </body>
+</html>

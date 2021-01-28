@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="initial-scale=1.0">
+<!-- style -->
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../assets/css/parts.css">
+<!-- js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../assets/js/common.js"></script>
+<script>
+  $(document).ready(function(){
+
+    if (window.ontouchstart === null) {
+      window.addEventListener('touchstart', playAudio());
+      // alert('テスト用：ページ遷移します　test1');
+    } else {
+      window.addEventListener('click', playAudio());
+      // alert('テスト用：ページ遷移します　test2');
+    }
+
+    var heightSize = $(window).height();
+    $('.screen_wrap').height(heightSize);
+    $('.nextLinkU').click(function(e) {
+      e.preventDefault();
+      var TransitionDelay = function(){
+        window.location.href = '../team_unicorn/';
+      }
+      setTimeout ( TransitionDelay, 200 );
+      // Save the selected team information to session storage
+      window.sessionStorage.setItem(['team'], $(this).data('index'));
+    });
+    $('.nextLinkN').click(function(e) {
+      e.preventDefault();
+      var TransitionDelay = function(){
+        window.location.href = '../team_neozeong/';
+      }
+      setTimeout ( TransitionDelay, 200 );
+      // Save the selected team information to session storage
+      window.sessionStorage.setItem(['team'], $(this).data('index'));
+    });
+  });
+</script>
+  <head>
+    <title>TEAM SELECT</title>
+  </head>
+  <body>
+    <audio id="myAudio">
+      <source src="../assets/mp3/tap01.mp3" type="audio/mpeg">
+    </audio>
+    <section id="select_sec" class="screen_wrap select_sec">
+      <div class="img_w img_w95 top_abs_bar">
+        <figure>
+          <img src="../assets/img/top_bar01.png" alt="装飾ヘッダー">
+        </figure>
+        <div class="top_abs_ttl">
+          <p class="font40 en_font">TEAM SELECT</p>
+        </div>
+      </div>
+        <figure class="img_w img_w100 img_mainbg_gundom">
+          <img src="../assets/img/img_gundom.png" alt="キャラクター">
+        </figure>
+      <div class="bottom_abs_button zindex_button">
+        <div class="ta_c mb10">
+          <figure>
+            <img width="138px" src="../assets/img/icon_select.png" alt="セレクト">
+          </figure>
+        </div>
+        <div class="flex wrap img_w img_w90">
+          <div class="w_49">
+            <a class="nextLink nextLinkU" data-index="1" onclick="playAudio()">
+              <p class="font29 c_blue01">Unicorn<br><span class="font28">Gundam</span><br><span class="font17">Perfectbility</span></p>
+              <figure class="button_shadow01">
+                <img src="../assets/img/team_u_btn01.png" alt="ユニコーンチームを選択">
+              </figure>
+            </a>
+          </div>
+          <div class="w_49">
+            <a class="nextLink nextLinkN" data-index="2" onclick="playAudio()">
+              <p class="font50 lh07 c_blue01">NEO<br><spna class="font29">ZEONG</span></p>
+              <figure class="button_shadow01">
+                <img src="../assets/img/team_n_btn.png" alt="ネオジオングチームを選択">
+              </figure>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script type="text/javascript">
+      var x = $("#myAudio")[0];
+      function playAudio() {
+        x.play();
+        console.log("Sound...");
+      }
+    </script>
+  </body>
+</html>
