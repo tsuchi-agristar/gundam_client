@@ -1,4 +1,8 @@
 @charset "utf-8";
+:root{
+	--max-width: 750px;
+	--main-height: 10vh;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -44,57 +48,155 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+img{
+	max-width: 100%;
+	vertical-align: bottom;
+}
 figure img{
-vertical-align: bottom;
-padding: 0;
-margin: 0;
-max-width: 100%;
+	vertical-align: bottom;
+	padding: 0;
+	margin: 0;
+	max-width: 100%;
+	/* max-height: 60%; */
 }
 @font-face {
 	font-family: 'jp_font';
-	src: url(./assets/font/FOT-CometStd-B.woff);
+	src: url(./assets/font/FOT-CometStd-B.woff2) format('woff2');
 }
 @font-face {
 	font-family: 'en_font';
-	src: url(./assets/font/silom-webfont.woff);
-}@font-face{
+	src: url(./assets/font/silom-webfont.woff2) format('woff2');
+}
+@font-face{
+	font-family: 'ch_font';
+	src: url(./assets/font/PingFangTC-Semibold.woff2) format('woff2');
+}
+@font-face{
 	font-family: adobe-gothic-std, sans-serif;
 	font-weight: 700;
 	font-style: normal;
 }
+
+
 .en_font{
-	font-family: 'en_font';
+	font-family: 'en_font', sans-serif;;
 }
 .ko_font{
 	font-family: adobe-gothic-std, sans-serif;
 }
+.ch_font{
+	font-family: 'ch_font', sans-serif;
+}
 body {
-	font-family: jp_font,"游ゴシック",YuGothic,"ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ",Meiryo,sans-serif;;
+	font-family: 'jp_font',"游ゴシック",YuGothic,"ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","メイリオ",Meiryo,sans-serif;;
 	color: #fff;
 }
 .op0{
 	opacity: 0;
 }
-/* select_sec */
+
+/*========================================================= 
+	header 
+=========================================================*/
+.headTitle{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	width: 100%;
+	margin: 0 auto;
+	z-index: 100;
+}	
+.pageTitle {
+	position: relative;
+    text-align: center;
+    width: 100%;
+    margin: 21vw 0 0 0;
+	z-index: 100;
+}
+@media (min-width: 460px) {
+    .pageTitle {
+		margin: 110px 0 0 0;
+    }
+}
+/*========================================================= 
+	wrap 
+=========================================================*/
+.mainvisual{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+/*========================================================= 
+	wrap 
+=========================================================*/
+.langBtnWrap{
+	width: 68vw;
+	margin: 0 auto;
+}
+@media (min-width: 460px) {
+    .langBtnWrap {
+		width: 360px;
+    }
+}
+/*========================================================= 
+	box 
+=========================================================*/
+.teamSection{
+	margin-top: 20px;
+}
+.loadWrap{
+	/* max-width: 82vw; */
+	max-width: 95vw;
+    width: 100%;
+    margin: 5px auto 0;
+    /* height: calc(100% - 235px); */
+    align-items: center;
+}
+@media (min-width: 360px) {
+    .langBtnWrap {
+		max-width: 460px;
+    }
+}
+.resultWrap{
+	position: absolute;
+    width: 80%;
+    margin: 0 auto;
+    top: 60%;
+    transform: translateY(-50%);
+    z-index: 0;
+    left: 0;
+    right: 0;
+}
+.resultImg{
+	margin-top: -25px !important;
+}
+.rankFont{
+	font-size: 82px;
+	letter-spacing: 3px;
+    line-height: 1;
+}
+/*========================================================= 
+	select_sec 
+=========================================================*/
 .screen_wrap{
-  position: relative;
-  left: 0;
-  top:0;
-  max-width: 750px;
-  width: 100%;
-  overflow: hidden;
-  margin: 0 auto;
+	position: relative;
+	left: 0;
+	top:0;
+	max-width: var(--max-width);
+	width: 100%;
+	max-height: 100%;
+	overflow: hidden;
+	margin: 0 auto;
 }
 .select_sec{
   width: 100%;
-  height: 100vh;
+  height: var(--main-height);
   background: url(./assets/img/bg_space.jpg) top /cover no-repeat;
 }
-.bg_unicorn_normal,
-.bg_neozeong_normal{
-	width: 100%;
-  height: 100vh;
-  background: url(./assets/img/bg_space_ptn.png) top /cover no-repeat;
+.select_sec.bg_attack{
+	background: url(./assets/img/bg_main02.png) top /cover no-repeat;
 }
 .screen_wrap.bg_blue:before,
 .screen_wrap.bg_blue_attack:before,
@@ -124,14 +226,25 @@ body {
 .shake_btn{
 	display:block
 }
+.tapArea{
+	cursor: pointer;
+}
 @keyframes shake{
 	0% { transform: scale(1, 1); }
 	50% { transform: scale(1.1, 1.1); }
 	100% { transform: scale(1, 1); }
 }
 .mask_bg.mask_bg_battlestart{
-	position: relative;
-	z-index: 100;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	margin: 0 auto;
+	max-width: 460px;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 800;
 }
 .mask_bg.mask_bg_battlestart::before{
 	position: absolute;
@@ -152,16 +265,19 @@ body {
 	transform: translateY(-50%);
 	z-index: 110;
 }
-.none{
-	/* transition: 200ms; */
+.none,.none1{
+	opacity: 0 !important;
 }
-.none.active,
 .none1.active {
-  opacity: 0 !important;
-  cursor: none;
+	opacity: 1 !important;
+	cursor: none;
 	transition: 300ms;
 }
-/*  */
+.none.active{
+	opacity: 1 !important;
+	pointer-events: auto;
+}
+/* img */
 .img_mainbg_gundom,
 .img_mainbg_gundom_result{
   position: absolute;
@@ -173,16 +289,6 @@ body {
 	top: 27.5vw;
 	right: 25.5vw;
 }
-.img_character_center,
-.img_character_left,
-.img_character_center.add_top{
-	position: absolute;
-	width: 100%;
-	top: 71vw;
-	right: 0;
-	left: 0;
-	transform: translateY(-50%);
-}
 .img_character_center.add_top{
 	top: 66vw;
 }
@@ -193,25 +299,25 @@ body {
 .abs_text_left,
 .abs_text_right{
 	position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
-	line-height: 1.4rem;
+	top: 50%;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
+	line-height: 1.3rem;
 }
 .abs_text_left{
-	left: 8vw;
+	left: 10vw;
   right: auto;
 }
 .abs_text_right{
 	left: auto;
-  right: 12vw;
+  right: 15vw;
 }
 .tap_button{
 	position: absolute;
-  bottom: 28vw;
-  left: 0;
-  right: 0;
+	bottom: 32vw;
+	left: 0;
+	right: 0;
 	z-index: 100;
 }
 .top_abs_ttl {
@@ -224,8 +330,8 @@ body {
 }
 .blinking{
 	-webkit-animation:blink 0.8s ease-in-out infinite alternate;
-  -moz-animation:blink 0.8s ease-in-out infinite alternate;
-  animation:blink 0.8s ease-in-out infinite alternate;
+	-moz-animation:blink 0.8s ease-in-out infinite alternate;
+	animation:blink 0.8s ease-in-out infinite alternate;
 }
 @-webkit-keyframes blink{
     0% {opacity:1;}
@@ -243,10 +349,10 @@ a.nextLink {
   position: relative;
   width: 100%;
   display: block;
-	transition: 300ms;
+  transition: 300ms;
 }
 a.nextLink p{
-	position: absolute;
+  position: absolute;
   left: 0;
   right: 0;
   top: 50%;
@@ -254,20 +360,20 @@ a.nextLink p{
   transform: translateY(-50%);
 }
 a.nextLink:hover{
-	background: linear-gradient(-120deg,rgba(255, 255, 255, 0.3), rgba(93, 252, 249, 0.8));
-  box-shadow: 0 0px 9px 5px rgba(90, 238, 229, 0.5);
+	opacity: .5;
 }
 a.nextLink:hover p{
 	color: #fff;
 }
 #loading {
-  width: 100%;
-  transition: all 1s;
-  background: #f1f1f1;
+	width: 100%;
+	height: 100%;
+	transition: all 1s;
+	background: #000000;
 	position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
+	top: 0;
+	left: 0;
+	z-index: 9999;
 }
 .loading_center{
 	position: absolute;
@@ -278,53 +384,48 @@ a.nextLink:hover p{
 	transform: translateY(-50%);
 	width: 75%;
 }
+.load_guidance {
+	display: flex;
+	flex-flow: column;
+	width: 95vw;
+	max-width: 500px;
+}
+
 .gallery {
   display: grid;
   gap: .5rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 .loaded {
-  opacity: 0;
-  visibility: hidden;
-	    display: none;
+	opacity: 0;
+	visibility: hidden;
+	display: none;
 }
-.loading_center img{
-	-moz-animation-name: heartBreak;
-	-moz-animation-duration: 3s;
-	-moz-animation-timing-function: ease;
-	-moz-animation-iteration-count: infinite;
-
-	-webkit-animation-name: heartBreak;
-	-webkit-animation-duration: 3s;
-	-webkit-animation-timing-function: ease;
-	-webkit-animation-iteration-count: infinite;
-
-	-o-animation-name: heartBreak;
-	-o-animation-duration: 3s;
-	-o-animation-timing-function: ease;
-	-o-animation-iteration-count: infinite;
-
-	-ms-animation-name: heartBreak;
-	-ms-animation-duration: 3s;
-	-ms-animation-timing-function: ease;
-	-ms-animation-iteration-count: infinite;
+.clearText {
+	text-indent:100%;
+	white-space:nowrap;
+	overflow:hidden;
 }
-@-moz-keyframes heartBreak {
-	0% { transform: scale(1, 1); }
-	100% { transform: scale(1.1, 1.1); }
+.bg_frame {
+	width: 100%;
 }
 
-@-webkit-keyframes heartBreak {
-	0% { transform: scale(1, 1); }
-	100% { transform: scale(1.1, 1.1); }
+/*========================================================= 
+	rezult 
+=========================================================*/
+.en_th{
+	letter-spacing: 0;
+    font-size: 17px;
+	margin: 0 0 0 9px;
 }
-
-@-o-keyframes heartBreak {
-	0% { transform: scale(1, 1); }
-	100% { transform: scale(1.1, 1.1); }
+.topText{
+	top: 39px;
+	left: 0;
+	right: 0;
 }
-
-@-ms-keyframes heartBreak {
-	0% { transform: scale(1, 1); }
-	100% { transform: scale(1.1, 1.1); }
+.bottomText{
+	bottom: 70px;
+    left: 0;
+    right: 0;
+    font-size: 48px;
 }

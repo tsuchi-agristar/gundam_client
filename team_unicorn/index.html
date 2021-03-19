@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="jp">
+<head>
 <meta charset="utf-8">
+<title>TEAM UNICORN GUNDAM</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -12,118 +14,313 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="../assets/js/common.js"></script>
 <script>
-  $(document).ready(function(){
-      var heightSize = $(window).height();
-      $('.screen_wrap').height(heightSize);
-      $('.mask_bg').height(heightSize);
-      // // デンジャー削除
-      // $('.none').delay(5000).queue(function() {
-      //   $(this).removeClass('active').dequeue();
-      // });
-      // // 画像切り替え
-      // setTimeout(function(){
-      //   $('.changeImg01_u').children('img').attr('src', '../assets/img/character_unicorn_danger01.png');
-      //   $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame_danger.png');
-      // },5000);
+  // Explain message
+  let explain1_ja = '<span class="c_yellow">エネルギーを送って</span><br>モビルスーツを支援せよ！';
+  let explain1_en = '<span class="c_yellow">Give energy</span><br>and back up Mobile Suit!';
+  let explain1_cn = '<span class="c_yellow">发送能量</span><br>来支持机动战士吧！';
+  let explain1_kr = '<span class="c_yellow">에너지를 보내</span><br>모빌슈트를 지원하라!';
 
+  let explain2_ja = 'ゲージのスターを獲得すると<br>相手にダメージを与え<br>ライフを減らすことができる';
+  let explain2_en = 'You can damage<br>the opponent by getting<br>stars of the gauge';
+  let explain2_cn = '獲得能量星<br>就能給予對方傷害';
+  let explain2_kr = '게이지의 별을 획득하면<br>상대에게 데미지를 줄 수 있다';
+  let guidance_end = false;
 
+  let getSid_retry_cnt = 0;
+  const api_call_max = 5;
 
+  function guidance1(lang) {
+    setTimeout(() => {
+      switch (lang) {
+        case '1':
+          $("#loadText").html(explain1_ja);
+          break;
+        case '2':
+          $("#loadText").addClass('en_font').html(explain1_en);
+          break;
+        case '3':
+          $("#loadText").addClass('ch_font font18').html(explain1_cn);
+          break;
+        case '4':
+          $("#loadText").addClass('ko_font font18').html(explain1_kr);
+          break;
+        default:
+          $("#loadText").html(explain1_ja);
+          break;
+      }
+      $("#loadImg").children("img").attr("src","../assets/img/unicorn_load01.png");
+    }, 100);
+  }
+  function guidance2(lang) {
+    setTimeout(() => {
+      switch (lang) {
+        case '1':
+          $("#loadText").html(explain1_ja);
+          break;
+        case '2':
+          $("#loadText").addClass('en_font').html(explain1_en);
+          break;
+        case '3':
+          $("#loadText").addClass('ch_font font18').html(explain1_cn);
+          break;
+        case '4':
+          $("#loadText").addClass('ko_font font18').html(explain1_kr);
+          break;
+        default:
+          $("#loadText").html(explain1_ja);
+          break;
+      }
+      $("#loadImg").children("img").attr("src","../assets/img/unicorn_load02.png");
+    }, 3000);
+  }
+  function guidance3(lang) {
+    setTimeout(() => {
+      switch (lang) {
+        case '1':
+          $("#loadText").html(explain2_ja);
+          break;
+        case '2':
+          $("#loadText").addClass('en_font').html(explain2_en);
+          break;
+        case '3':
+          $("#loadText").html(explain2_cn);
+          break;
+        case '4':
+          $("#loadText").html(explain2_kr);
+          break;
+        default:
+          $("#loadText").html(explain2_ja);
+          break;
+      }
+      $("#loadImg").children("img").attr("src","../assets/img/unicorn_load03.png");
+    }, 6000);
+  }
+  function guidance4(lang) {
+    setTimeout(() => {
+      switch (lang) {
+        case '1':
+          $("#loadText").html(explain1_ja);
+          break;
+        case '2':
+          $("#loadText").addClass('en_font').html(explain1_en);
+          break;
+        case '3':
+          $("#loadText").addClass('en_font').html(explain1_cn);
+          break;
+        case '4':
+          $("#loadText").addClass('ko_font').html(explain1_kr);
+          break;
+        default:
+          $("#loadText").html(explain1_ja);
+          break;
+      }
+      $("#loadImg").children("img").attr("src","../assets/img/unicorn_load04_" + lang + ".png");
+      guidance_end = true;
+    }, 9000);
+  }
+  function battleStart() {
+    setTimeout(() => {
+      $('#changeFrame').children('img').attr('src', '../assets/img/frame_orange.png');
+      $('.none').addClass('active').dequeue();
+    }, 100);
+  }
+  function pagination() {
+    setTimeout(() => {
+      window.location.href = '../team_unicorn_attack/';
+    }, 500);
+  }
+  function getSid() {
+    let l_sid = window.sessionStorage.getItem('sid');
+    if(l_sid == null || l_sid == "") {
+      // Initialize
+      $.ajax({
+        url: 'https://gundamapim.azurewebsites.net/api/front/initialize',
+        type: 'GET',
+        dataType: 'json',
+        timeout:3000
+      })
+      .done((data) => {
+        // console.log(JSON.stringify(data));
+        // If json object is empty
+        if(Object.keys(data).length == 0) {
+          getSid_retry_cnt++;
+          if(getSid_retry_cnt < api_call_max) {
+            console.log("Retry...");
+            // Retry
+            setTimeout(() => {
+              getSid();
+            }, 2000);
+            return;
+          }
+        }
+        if (data == null) {
+          console.log("data is null");
+        } else if (data.sid == null) {
+          console.log("Sid is null, so go to top page.");
+          // Page transition to Top Page
+          location.href="../";
+        } else {
+          l_sid = data.sid;
+          // Set sid to session storage
+          window.sessionStorage.setItem('sid', l_sid);
+        }
+      })
+      .fail((data) => {
+        console.log("Exception occurred, so api call retry.");
+        // Sometimes Exception occures, because of the cold standby mode of the server.
+        // Go to top page, if api call failed several times.
+        getSid_retry_cnt++;
+        if(getSid_retry_cnt < api_call_max) {
+          // Retry
+          setTimeout(() => {
+            getSid();
+          }, 2000);
+          return;
+        }
+        // Retry out
+        if (getSid_retry_cnt == api_call_max ) {
+          console.log("Retry out, so go to top page.");
+          // Page transition to Top Page
+          location.href="../";
+        }
+      })
+      .always((data) => {
+        // console.log("Complete...");
+      });
+    }
+    return l_sid;
+  }
+  function gameStart() {
+    let timerId;
     // Polling
-    let pooling = () => {
+    let gameStartCheck = () => {
       $.ajax({
         url: 'https://gundamapim.azurewebsites.net/api/front/status',
         type: 'GET',
         dataType: 'json'
       })
       .done((data) => {
-        // Case game start(status=1)
-        console.log(JSON.stringify(data));
-        if(data.status == 1) {
-          console.log("status is 1.");
-          // Stop Pooling
-          clearInterval(pooling);
+        // console.log(JSON.stringify(data));
+        if (data == null) {
+          console.log("data is null");
+          return;
+        }
+        let status = data.status;
+        // For develop
+        status = window.sessionStorage.getItem('status');
 
-          // デンジャー削除
-          $('.none').delay(0).queue(function() {
-            $(this).removeClass('active').dequeue();
-          });
-          $('.changeImg01_u').children('img').attr('src', '../assets/img/character_unicorn_danger01.png');
-          $('.changeFrame').children('img').attr('src', '../assets/img/bg_frame_danger.png');
-          // Sound
-          // startsound.currentTime = 0;
-          // startsound.play();
-          // Page transition
-          setTimeout(() => {
-            location.href="../team_unicorn_attack/";
-          },1500);
+        // Game Start
+        if(status == 1 && guidance_end) {
+          console.log("Game Start...");
+          // Stop timer
+          clearInterval(timerId);
+          // Battle Start
+          battleStart();
+          // Pagination
+          pagination();
+        } else {
+          console.log("Waiting for game start...");
         }
       })
       .fail((data) => {
         console.log("Exception...");
       })
       .always((data) => {
-       console.log("Complete...");
+        // console.log("Complete...");
       });
     }
     // Execute pooling
-    poolid = setInterval(pooling, 2000);
+    timerId = setInterval(gameStartCheck, 2000);
+  }
+
+  // For test
+  function battleStart_test() {
+    setTimeout(() => {
+      $('#changeFrame').children('img').attr('src', '../assets/img/frame_orange.png');
+      $('.none').addClass('active').dequeue();
+    }, 12000);
+  }
+  // For test
+  function pagination_test() {
+    setTimeout(() => {
+      window.location.href = '../team_unicorn_attack/';
+    }, 14000);
+  }
+
+
+  $(document).ready(function(){
+    let heightSize = $(window).height();
+    $('.screen_wrap').height(heightSize);
+    $('.mask_bg').height(heightSize);
   });
+
 </script>
-  <head>
-    <title>TEAM UNICORN GUNDAM</title>
-  </head>
+</head>
   <body>
-    <audio id="openAudio">
-      <source src="../assets/mp3/standby.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="battleStart">
-      <source src="../assets/mp3/battle_start.mp3" type="audio/mpeg">
-    </audio>
-    <section id="team_neozeong" class="screen_wrap bg_unicorn_normal bg_blue">
-      <div class="none active mask_bg mask_bg_battlestart">
+    <!-- <section id="team_neozeong" class="screen_wrap select_sec"> -->
+    <section id="guidance" class="screen_wrap select_sec">
+      <div class="none mask_bg mask_bg_battlestart">
         <div class="ttl_center">
           <figure>
-            <img src="../assets/img/ttl_battlestart.png" alt="">
+            <img src="../assets/img/title_start.png" alt="">
           </figure>
         </div>
       </div>
-      <div class="img_w img_w95 top_abs_bar">
+      <div class="headTitle">
         <figure>
           <img src="../assets/img/top_bar01.png" alt="装飾ヘッダー">
         </figure>
       </div>
-      <div class="top_abs_ttl">
-        <p class="font40 en_font">STAND BY</p>
+      <div class="pageTitle">
+        <p class="font40 en_font">STAND BY...</p>
       </div>
-      <div class="img_character_left">
-        <figure class="changeImg01_u img_w img_w60">
-          <img src="../assets/img/character_unicorn01.png" alt="キャラクター">
+      <!-- <div class="loadWrap">
+        <figure id="loadImg" class="">
+          <img src="../assets/img/unicorn_load01.png">
         </figure>
       </div>
       <div class="bottom_abs_button zindex_button">
-        <div class="flex wrap img_w img_w90">
-          <figure class="bg_frame rel">
-            <p class="abs_text_center font15"><span class="c_yellow">エネルギーを送って</span><br>ユニコーンガンダム  を支援せよ！</p>
-            <figure class="changeFrame">
-              <img src="../assets/img/bg_frame.png" alt="赤いフレーム">
+        <div class="flex wrap img_w img_w75">
+          <figure class="bg_frame">
+            <p id="loadText" class="abs_text_center bold font15"></p>
+            <figure id="changeFrame" class="changeFrame">
+              <img src="../assets/img/frame.png" alt="フレーム">
             </figure>
           </figure>
+        </div>
+      </div> -->
+
+      <div class="loadWrap load_guidance">
+        <figure id="loadImg">
+          <img src="../assets/img/unicorn_load01.png">
+        </figure>
+        <div class="bottom_abs_button zindex_button">
+          <div class="flex wrap img_w img_w75">
+            <figure class="bg_frame">
+              <p id="loadText" class="abs_text_center bold font15"></p>
+              <figure id="changeFrame" class="changeFrame">
+                <img src="../assets/img/frame.png" alt="フレーム">
+              </figure>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
     <script>
-      //
-      var y = $("#openAudio")[0];
-      setTimeout("mu()",0);
-      function mu(){
-        y.play();
-      }
-      //
-      var battleStart = $("#battleStart")[0];
-      setTimeout("battleStart_bgm()",5000);
-      function battleStart_bgm(){
-        battleStart.play();
-      }
+      let lang = window.sessionStorage.getItem('lang');
+      // Guidance
+      guidance1(lang);
+      guidance2(lang);
+      guidance3(lang);
+      guidance4(lang);
+      // Get sid
+      getSid();
+      // Game Start
+      // gameStart();
+
+      // For test
+      battleStart_test();
+      pagination_test();
     </script>
   </body>
 </html>
